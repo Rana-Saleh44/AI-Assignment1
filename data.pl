@@ -161,10 +161,15 @@ boycott_company('Mondelez International', 'Mondelez International Inc.  on Nov. 
 boycott_company('Mars', 'Mars will support israeli start-ups and the formation of companies, and will work together with leading israeli academic institutions, such as the Hebrew University, the Weizmann Institute, the Technion, Migall and Tel Hai College, among others, to further Foodtech innovations.').
 
 %1.List all orders of a specific customer(as a list).
+
+
 %2.Get the number of orders of a specific customer given customer id.
+
+
 % 3.List all items in a specific customer order given customer id and
 % order id
 getItemsInOrderById(CustomerName, OrderId, Items):- customer(CustomerId, CustomerName), order(CustomerId, OrderId, Items).
+
 % 4.Get the num of items in a specific customer order given customer.
 % Name and order id.
 
