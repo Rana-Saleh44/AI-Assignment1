@@ -159,3 +159,49 @@ boycott_company('Henkel', 'Henkel invests in israeli technology namely by invest
 boycott_company('Americana', 'Americana Group sold in 2016 to businessman Mohamed Al Abbar, He is recognized for his strong ties with israel, as well as his donations and support').
 boycott_company('Mondelez International', 'Mondelez International Inc.  on Nov. 10(2020) announced a seed investment in Torr FoodTech, an early stage company based in israel that has developed proprietary technology Mondelez said brings real, simple ingredients together to offer multi-textural, sensorial experiences.').
 boycott_company('Mars', 'Mars will support israeli start-ups and the formation of companies, and will work together with leading israeli academic institutions, such as the Hebrew University, the Weizmann Institute, the Technion, Migall and Tel Hai College, among others, to further Foodtech innovations.').
+
+%1.List all orders of a specific customer(as a list).
+
+
+%2.Get the number of orders of a specific customer given customer id.
+
+
+% 3.List all items in a specific customer order given customer id and
+% order id
+getItemsInOrderById(CustomerName, OrderId, Items):- customer(CustomerId, CustomerName), order(CustomerId, OrderId, Items).
+
+% 4.Get the num of items in a specific customer order given customer.
+% Name and order id.
+
+%5
+append([], L, L).
+append([H|T], L2, [H|NT]):-
+append(T, L2, NT).
+
+creplaceBoycottItemsFromAnOrder(CustomerName, OrderId, NewList):-
+    getItemsInOrderById(CustomerName, OrderId, Items),
+    replaceBoycottItem(Items, NewList).
+
+replaceBoycottItem([], []).
+replaceBoycottItem([item|rest], [newItem|newRest]):-
+    alternative(item, newItem),
+    appenElement(newRest, newItem, updatedrest),
+    replaceBoycottItem(rest, updatedrest).
+%12
+:- dynamic item/3.
+add_item(Item, Brand, Quantity):-
+    assert(item(Item, Brand, Quantity)).
+remove_item(Item, Brand, Quantity):-
+    retract(item(Item, Brand, Quantity)).
+
+:- dynamic alternative/2.
+add_alternative(Item, NewItem):-
+    assert(alternative(Item, NewItem)).
+remove_alternative(Item, NewItem):-
+    retract(alternative(Item, NewItem)).
+
+:- dynamic boycott_company/2.
+add_boycott(CompanyName, description):-
+    assert(boycott_company(CompanyName, description)).
+remove_boycott(CompanyName, description):-
+    retract(boycott_company(CompanyName, description)).
