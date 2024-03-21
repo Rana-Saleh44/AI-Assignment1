@@ -201,7 +201,7 @@ remove_alternative(ItemName, AlternativeItem):-
     retract(alternative(ItemName, AlternativeItem)).
 
 :- dynamic boycott_company/2.
-add_boycott(CompanyName, Justification):-
-    assert(boycott_company(CompanyName, Justification)).
-remove_boycott(CompanyName, Justification):-
-    retract(boycott_company(CompanyName, Justification)).
+add_boycott(CompanyName, justification):-
+    assert(boycott_company(CompanyName, justification)).
+remove_boycott(CompanyName, justification):-
+    retract(boycott_company(CompanyName, justification)).
