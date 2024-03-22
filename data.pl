@@ -182,7 +182,8 @@ getItemsInOrderById(CustomerName, OrderId, Items):- customer(CustomerId, Custome
 % 4.Get the num of items in a specific customer order given customer.
 % Name and order id.
 
-%5
+%9 Given an username and order ID, update the order such that all
+%boycott items are replaced by an alternative (if exists).
 append([], L, L).
 append([H|T], L2, [H|NT]):-
 append(T, L2, NT).
@@ -196,7 +197,9 @@ replaceBoycottItem([item|rest], [newItem|newRest]):-
     alternative(item, newItem),
     appenElement(newRest, newItem, updatedrest),
     replaceBoycottItem(rest, updatedrest).
-%12
+%12  BONUS: Insert/Remove (1)item, (2)alternative and (3)new boycott
+% company to/from the knowledge base. Hint: use assert to insert new fact
+% and retract to remove a fact
 :- dynamic item/3.
 add_item(ItemName, CompanyName, Price):-
     assert(item(ItemName, CompanyName, Price)).
