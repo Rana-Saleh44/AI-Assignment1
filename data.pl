@@ -174,14 +174,19 @@ getAllOrders(CustomerID, CurrentOrderID, Orders):-
     getAllOrders(CustomerID, NextOrderID, Temp),
     Orders = [order(CustomerID,CurrentOrderID, ITems) | Temp].
 %2.Get the number of orders of a specific customer given customer id.
-%
+countOrdersOfCustomer(CustomerName, Count) :-list_orders(CustomerName,Orders), size(Orders, Count).
+
 % 3.List all items in a specific customer order given customer id and
 % order id
 getItemsInOrderById(CustomerName, OrderId, Items):- customer(CustomerId, CustomerName), order(CustomerId, OrderId, Items).
 
 % 4.Get the num of items in a specific customer order given customer.
 % Name and order id.
-
+size([],0).
+size([_|T],N):-size(T,N1),N is N1+1.
+getNumOfItems(CustomerName, OrderId, Count) :-
+ customer(CustomerId, CustomerName), order(CustomerId, OrderId, Items),
+  size(Items, Count).
 %9 Given an username and order ID, update the order such that all
 %boycott items are replaced by an alternative (if exists).
 append([], L, L).
