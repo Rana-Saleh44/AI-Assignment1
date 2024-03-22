@@ -201,7 +201,6 @@ replaceBoycottItem([Item|Remaining], [NewItem|NewRemaining]):-
     !,
     replaceBoycottItem(Remaining, NewRemaining).
 replaceBoycottItem([Item|Remaining], [Item|NewRemaining]):-
-    %if there's no alternative for item -> is not boycott item
                    replaceBoycottItem(Remaining, NewRemaining).
 
 
@@ -211,6 +210,7 @@ replaceBoycottItem([Item|Remaining], [Item|NewRemaining]):-
 calcPriceAfterReplacingBoycottItemsFromAnOrder(CustomerName, OrderId, NewList, TotalPrice):-
     replaceBoycottItemsFromAnOrder(CustomerName, OrderId, NewList),
     calcTotalPrice(NewList, TotalPrice).
+
 
 calcTotalPrice([], 0).
 calcTotalPrice([H|T], Price):-
