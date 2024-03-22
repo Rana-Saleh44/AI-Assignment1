@@ -161,11 +161,20 @@ boycott_company('Mondelez International', 'Mondelez International Inc.  on Nov. 
 boycott_company('Mars', 'Mars will support israeli start-ups and the formation of companies, and will work together with leading israeli academic institutions, such as the Hebrew University, the Weizmann Institute, the Technion, Migall and Tel Hai College, among others, to further Foodtech innovations.').
 
 %1.List all orders of a specific customer(as a list).
+list_orders(CustomerName,Orders):-
+    customer(CustomerID,CustomerName),
+    getAllOrders(CustomerID,1,Orders).
 
+getAllOrders(CustomerID, CurrentOrderID, Orders):-
+    \+ order(CustomerID, CurrentOrderID, _), Orders = [].
 
+getAllOrders(CustomerID, CurrentOrderID, Orders):-
+    order(CustomerID, CurrentOrderID, ITems),
+    NextOrderID is CurrentOrderID + 1,
+    getAllOrders(CustomerID, NextOrderID, Temp),
+    Orders = [order(CustomerID,CurrentOrderID, ITems) | Temp].
 %2.Get the number of orders of a specific customer given customer id.
-
-
+%
 % 3.List all items in a specific customer order given customer id and
 % order id
 getItemsInOrderById(CustomerName, OrderId, Items):- customer(CustomerId, CustomerName), order(CustomerId, OrderId, Items).
