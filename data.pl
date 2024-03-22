@@ -161,11 +161,20 @@ boycott_company('Mondelez International', 'Mondelez International Inc.  on Nov. 
 boycott_company('Mars', 'Mars will support israeli start-ups and the formation of companies, and will work together with leading israeli academic institutions, such as the Hebrew University, the Weizmann Institute, the Technion, Migall and Tel Hai College, among others, to further Foodtech innovations.').
 
 %1.List all orders of a specific customer(as a list).
+list_orders(CustomerName,Orders):-
+    customer(CustomerID,CustomerName),
+    getAllOrders(CustomerID,1,Orders).
 
+getAllOrders(CustomerID, CurrentOrderID, Orders):-
+    \+ order(CustomerID, CurrentOrderID, _), Orders = [].
 
+getAllOrders(CustomerID, CurrentOrderID, Orders):-
+    order(CustomerID, CurrentOrderID, ITems),
+    NextOrderID is CurrentOrderID + 1,
+    getAllOrders(CustomerID, NextOrderID, Temp),
+    Orders = [order(CustomerID,CurrentOrderID, ITems) | Temp].
 %2.Get the number of orders of a specific customer given customer id.
-
-
+%
 % 3.List all items in a specific customer order given customer id and
 % order id
 getItemsInOrderById(CustomerName, OrderId, Items):- customer(CustomerId, CustomerName), order(CustomerId, OrderId, Items).
@@ -189,19 +198,19 @@ replaceBoycottItem([item|rest], [newItem|newRest]):-
     replaceBoycottItem(rest, updatedrest).
 %12
 :- dynamic item/3.
-add_item(Item, Brand, Quantity):-
-    assert(item(Item, Brand, Quantity)).
-remove_item(Item, Brand, Quantity):-
-    retract(item(Item, Brand, Quantity)).
+add_item(ItemName, CompanyName, Price):-
+    assert(item(ItemName, CompanyName, Price)).
+remove_item(ItemName, CompanyName, Price):-
+    retract(item(ItemName, CompanyName, Price)).
 
 :- dynamic alternative/2.
-add_alternative(Item, NewItem):-
-    assert(alternative(Item, NewItem)).
-remove_alternative(Item, NewItem):-
-    retract(alternative(Item, NewItem)).
+add_alternative(ItemName, AlternativeItem):-
+    assert(alternative(ItemName, AlternativeItem)).
+remove_alternative(ItemName, AlternativeItem):-
+    retract(alternative(ItemName, AlternativeItem)).
 
 :- dynamic boycott_company/2.
-add_boycott(CompanyName, description):-
-    assert(boycott_company(CompanyName, description)).
-remove_boycott(CompanyName, description):-
-    retract(boycott_company(CompanyName, description)).
+add_boycott(CompanyName, Justification):-
+    assert(boycott_company(CompanyName, Justification)).
+remove_boycott(CompanyName, Justification):-
+    retract(boycott_company(CompanyName, Justification)).
