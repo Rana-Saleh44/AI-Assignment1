@@ -198,19 +198,19 @@ replaceBoycottItem([item|rest], [newItem|newRest]):-
     replaceBoycottItem(rest, updatedrest).
 %12
 :- dynamic item/3.
-add_item(Item, Brand, Quantity):-
-    assert(item(Item, Brand, Quantity)).
-remove_item(Item, Brand, Quantity):-
-    retract(item(Item, Brand, Quantity)).
+add_item(ItemName, CompanyName, Price):-
+    assert(item(ItemName, CompanyName, Price)).
+remove_item(ItemName, CompanyName, Price):-
+    retract(item(ItemName, CompanyName, Price)).
 
 :- dynamic alternative/2.
-add_alternative(Item, NewItem):-
-    assert(alternative(Item, NewItem)).
-remove_alternative(Item, NewItem):-
-    retract(alternative(Item, NewItem)).
+add_alternative(ItemName, AlternativeItem):-
+    assert(alternative(ItemName, AlternativeItem)).
+remove_alternative(ItemName, AlternativeItem):-
+    retract(alternative(ItemName, AlternativeItem)).
 
 :- dynamic boycott_company/2.
-add_boycott(CompanyName, description):-
-    assert(boycott_company(CompanyName, description)).
-remove_boycott(CompanyName, description):-
-    retract(boycott_company(CompanyName, description)).
+add_boycott(CompanyName, Justification):-
+    assert(boycott_company(CompanyName, Justification)).
+remove_boycott(CompanyName, Justification):-
+    retract(boycott_company(CompanyName, Justification)).
