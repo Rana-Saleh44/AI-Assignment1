@@ -159,3 +159,61 @@ boycott_company('Henkel', 'Henkel invests in israeli technology namely by invest
 boycott_company('Americana', 'Americana Group sold in 2016 to businessman Mohamed Al Abbar, He is recognized for his strong ties with israel, as well as his donations and support').
 boycott_company('Mondelez International', 'Mondelez International Inc.  on Nov. 10(2020) announced a seed investment in Torr FoodTech, an early stage company based in israel that has developed proprietary technology Mondelez said brings real, simple ingredients together to offer multi-textural, sensorial experiences.').
 boycott_company('Mars', 'Mars will support israeli start-ups and the formation of companies, and will work together with leading israeli academic institutions, such as the Hebrew University, the Weizmann Institute, the Technion, Migall and Tel Hai College, among others, to further Foodtech innovations.').
+
+
+
+%Nada's Questions
+%question 5
+calcPriceOfOrder(CustomerName, OrderID, TotalPrice) :-
+    %gives me the custome according to the name of the customer.
+    customer(CustomerID, CustomerName),
+    %gives me the list of items according to the customer id and order id.
+    order(CustomerID, OrderID, Items),
+    %to calculate the total price of the items in the order and put the the whole price to TotalPrice.
+    calcPriceOfItems(Items, TotalPrice).
+
+
+%this is the base case when the list of the items that we return it from the step above  is empty the TotalPrice will be equal 0.
+calcPriceOfItems([], 0).
+%iteration on the list of the items.
+calcPriceOfItems([Item|RemainingItems], TotalPrice) :-
+    %to get the price of the item by the name of this item.
+    % item(ItemName, companyName, Price).
+    item(Item,_, Price),
+    %calc the the Totalprice of the remaining items recursively.
+    calcPriceOfItems(RemainingItems, RemainingPrice),
+    %to put the price of each item to the remaining price and put them in TotalPrice.
+    TotalPrice is Price + RemainingPrice.
+
+
+
+%question 6
+
+
+
+
+%question 7
+%question 8
+
+
+
+
+
+
+
+
+
+
+
+    
+whyToBoycott(CompanyOrItemName, Justification) :-
+    boycott_company(CompanyOrItemName, Justification).
+
+whyToBoycott(CompanyOrItemName, Justification) :-
+    whyToBoycott(_, Justification).
+
+whyToBoycott(CompanyOrItemName, Justification) :-
+    item(_, CompanyOrItemName, _),
+    boycott_company(CompanyName, Justification),
+    CompanyOrItemName = CompanyName.
+    
