@@ -173,12 +173,28 @@ getAllOrders(CustomerID, CurrentOrderID, Orders):-
     NextOrderID is CurrentOrderID + 1,
     getAllOrders(CustomerID, NextOrderID, Temp),
     Orders = [order(CustomerID,CurrentOrderID, ITems) | Temp].
+    
+    
+    
+    
+    
+    
 %2.Get the number of orders of a specific customer given customer id.
 countOrdersOfCustomer(CustomerName, Count) :-list_orders(CustomerName,Orders), size(Orders, Count).
+
+
+
+
+
 
 % 3.List all items in a specific customer order given customer id and
 % order id
 getItemsInOrderById(CustomerName, OrderId, Items):- customer(CustomerId, CustomerName), order(CustomerId, OrderId, Items).
+
+
+
+
+
 
 % 4.Get the num of items in a specific customer order given customer.
 % Name and order id.
@@ -189,6 +205,68 @@ getNumOfItems(CustomerName, OrderId, Count) :-
   size(Items, Count).
 
 
+
+
+
+
+%5
+calcPriceOfOrder(CustomerName, OrderID, TotalPrice) :-
+    %gives me the custome according to the name of the customer.
+    customer(CustomerID, CustomerName),
+    %gives me the list of items according to the customer id and order id.
+    order(CustomerID, OrderID, Items),
+    %to calculate the total price of the items in the order and put the the whole price to TotalPrice.
+    calcPriceOfItems(Items, TotalPrice).
+%this is the base case when the list of the items that we return it from the step above  is empty the TotalPrice will be equal 0.
+calcPriceOfItems([], 0).
+%iteration on the list of the items.
+calcPriceOfItems([Item|RemainingItems], TotalPrice) :-
+    %to get the price of the item by the name of this item.
+    % item(ItemName, companyName, Price).
+    item(Item,_, Price),
+    %calc the the Totalprice of the remaining items recursively.
+    calcPriceOfItems(RemainingItems, RemainingPrice),
+    %to put the price of each item to the remaining price and put them in TotalPrice.
+    TotalPrice is Price + RemainingPrice.
+%6
+isBoycott(ItemOrCompanyName) :-
+    (   item(ItemOrCompanyName, Company, _)
+    ;   % Check if ItemOrCompanyName is a company name
+        item(_, Company, ItemOrCompanyName)
+    ),
+    boycott_company(Company, _).
+
+
+
+
+
+
+%8
+%this function takes the customerName and OrderId and return a list contains the non boycotted items.
+removeBoycottItemsFromAnOrder(CustomerName, OrderId, NewList):-
+    % it gives me a list of items for a specific customer with a specific order id.
+    getItemsInOrderById(CustomerName, OrderId, Items),
+    % Remove boycott items
+    removeBoycottItems(Items, NewList).
+%this is the Base case if the list is empty, this means that there is no more items in the list.
+removeBoycottItems([], []).
+%this function it takes the above list and return a list "NewRest" that contains only the non boycotted items.
+removeBoycottItems([BoycottItem|Rest], NewRest):-
+    % to Check if the item is boycotted
+    %if the condition succeeds this item is skipped.
+    isBoycott(BoycottItem),
+    % Continue removing the boycotted items.
+    removeBoycottItems(Rest, NewRest).
+% If the item is not boycotted, keep it and continue removing other items
+removeBoycottItems([Item|Rest], [Item|NewRest]):-
+    %to check if the item isnot boycotted.
+    \+ isBoycott(Item),
+    % Continue removing other items
+    removeBoycottItems(Rest, NewRest).
+
+
+    
+    
 %9 Given an username and order ID, update the order such that all
 %boycott items are replaced by an alternative (if exists).
 replaceBoycottItemsFromAnOrder(CustomerName, OrderId, NewList):-
