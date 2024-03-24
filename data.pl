@@ -228,17 +228,11 @@ calcPriceOfItems([Item|RemainingItems], TotalPrice) :-
     calcPriceOfItems(RemainingItems, RemainingPrice),
     %to put the price of each item to the remaining price and put them in TotalPrice.
     TotalPrice is Price + RemainingPrice.
+
+
+
+
 %6
-/*
-isBoycott(ItemName) :-
-     item(ItemOrCompanyName, Company, _)
-     ,
-     boycott_company(ItemName, _),!.
-% Check if ItemOrCompanyName is a company name
-isBoycott(CompanyName) :-
-        item(_,CompanyName, _)
-        ,
-        boycott_company(ItemName, _). */
 isBoycott(ItemOrCompany) :-
    item(ItemOrCompany, Comp, _)
    ,
@@ -246,7 +240,7 @@ isBoycott(ItemOrCompany) :-
    boycott_company(Comp,_ )
    ;
    boycott_company(ItemOrCompany,_)
-).
+   ).
 
 
 %7
