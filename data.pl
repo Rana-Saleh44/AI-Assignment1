@@ -160,6 +160,10 @@ boycott_company('Americana', 'Americana Group sold in 2016 to businessman Mohame
 boycott_company('Mondelez International', 'Mondelez International Inc.  on Nov. 10(2020) announced a seed investment in Torr FoodTech, an early stage company based in israel that has developed proprietary technology Mondelez said brings real, simple ingredients together to offer multi-textural, sensorial experiences.').
 boycott_company('Mars', 'Mars will support israeli start-ups and the formation of companies, and will work together with leading israeli academic institutions, such as the Hebrew University, the Weizmann Institute, the Technion, Migall and Tel Hai College, among others, to further Foodtech innovations.').
 
+
+
+
+
 %1.List all orders of a specific customer(as a list).
 list_orders(CustomerName,Orders):-
     customer(CustomerID,CustomerName),
@@ -228,23 +232,21 @@ calcPriceOfItems([Item|RemainingItems], TotalPrice) :-
     calcPriceOfItems(RemainingItems, RemainingPrice),
     %to put the price of each item to the remaining price and put them in TotalPrice.
     TotalPrice is Price + RemainingPrice.
+
+
+
+
+    
 %6
-/*
-isBoycott(ItemName) :-
-     item(ItemOrCompanyName, Company, _)
-     ,
-     boycott_company(ItemName, _),!.
-% Check if ItemOrCompanyName is a company name
-isBoycott(CompanyName) :-
-        item(_,CompanyName, _)
-        ,
-        boycott_company(ItemName, _). */
 isBoycott(ItemOrCompany) :-
-   (item(ItemOrCompany, Comp, _)
+   item(ItemOrCompany, Comp, _)
    ,
-   boycott_company(Comp,_ ))
+   (
+   boycott_company(Comp,_ )
    ;
-   boycott_company(ItemOrCompany,_).
+   boycott_company(ItemOrCompany,_)
+   ).
+
         
 
 
@@ -254,6 +256,10 @@ whyToBoycott(ItemName, Justification) :-
    item(ItemName,CompanyName,_)
    ,
    boycott_company(CompanyName, Justification).
+
+
+
+
 
 
 %8
@@ -280,6 +286,9 @@ removeBoycottItems([Item|Rest], [Item|NewRest]):-
     removeBoycottItems(Rest, NewRest).
 
 
+
+
+
     
     
 %9 Given an username and order ID, update the order such that all
@@ -298,6 +307,10 @@ replaceBoycottItem([Item|Remaining], [Item|NewRemaining]):-
                    replaceBoycottItem(Remaining, NewRemaining).
 
 
+
+
+
+
 % 10 Given an username and order ID, calculate the price of the order
 % after
 %replacing all boycott items by its alternative (if it exists).
@@ -312,6 +325,10 @@ calcTotalPrice([H|T], Price):-
     Price is X + Y.
 
 
+
+
+
+
 % 11 calculate the difference in price between the boycott item and its
 % alternative.
 getTheDifferenceInPriceBetweenItemAndAlternative(ItemName, A, DiffPrice):-
@@ -319,6 +336,9 @@ getTheDifferenceInPriceBetweenItemAndAlternative(ItemName, A, DiffPrice):-
     alternative(ItemName, A),
     item(A, _, Y),
     DiffPrice is X - Y.
+
+
+
 
 
 %12 BONUS: Insert/Remove (1)item, (2)alternative and
