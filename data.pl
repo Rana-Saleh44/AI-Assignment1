@@ -173,12 +173,12 @@ getAllOrders(CustomerID, CurrentOrderID, Orders):-
     NextOrderID is CurrentOrderID + 1,
     getAllOrders(CustomerID, NextOrderID, Temp),
     Orders = [order(CustomerID,CurrentOrderID, ITems) | Temp].
-
-
-
-
-
-
+    
+    
+    
+    
+    
+    
 %2.Get the number of orders of a specific customer given customer id.
 countOrdersOfCustomer(CustomerName, Count) :-list_orders(CustomerName,Orders), size(Orders, Count).
 
@@ -228,19 +228,25 @@ calcPriceOfItems([Item|RemainingItems], TotalPrice) :-
     calcPriceOfItems(RemainingItems, RemainingPrice),
     %to put the price of each item to the remaining price and put them in TotalPrice.
     TotalPrice is Price + RemainingPrice.
-
-
-
-
 %6
+/*
+isBoycott(ItemName) :-
+     item(ItemOrCompanyName, Company, _)
+     ,
+     boycott_company(ItemName, _),!.
+% Check if ItemOrCompanyName is a company name
+isBoycott(CompanyName) :-
+        item(_,CompanyName, _)
+        ,
+        boycott_company(ItemName, _). */
 isBoycott(ItemOrCompany) :-
-   item(ItemOrCompany, Comp, _)
+   (item(ItemOrCompany, Comp, _)
    ,
-   (
-   boycott_company(Comp,_ )
+   boycott_company(Comp,_ ))
    ;
-   boycott_company(ItemOrCompany,_)
-   ).
+   boycott_company(ItemOrCompany,_).
+        
+
 
 
 %7
@@ -274,8 +280,8 @@ removeBoycottItems([Item|Rest], [Item|NewRest]):-
     removeBoycottItems(Rest, NewRest).
 
 
-
-
+    
+    
 %9 Given an username and order ID, update the order such that all
 %boycott items are replaced by an alternative (if exists).
 replaceBoycottItemsFromAnOrder(CustomerName, OrderId, NewList):-
