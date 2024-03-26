@@ -232,22 +232,32 @@ calcPriceOfItems([Item|RemainingItems], TotalPrice) :-
 
 
 %6
-isBoycott(ItemOrCompany) :-
-   item(ItemOrCompany, Comp, _)
-   ,
+isBoycott(ItemOrCompanyName) :-
    (
-   boycott_company(Comp,_ )
+   item(ItemOrCompanyName, Company, _)
+   ,
+   boycott_company(Company,_ )
+   )
    ;
-   boycott_company(ItemOrCompany,_)
+   (
+   item(_,ItemOrCompanyName, _)
+   ,
+   boycott_company(ItemOrCompanyName,_ )
    ).
 
 
 %7
-whyToBoycott(ItemName, Justification) :-
-   item(ItemName,CompanyName,_)
-   ,
-   boycott_company(CompanyName, Justification).
-
+whyToBoycott(ItemOrCompanyName, Justification) :-
+    ( item(ItemOrCompanyName, CompanyName, _)
+    ,
+      boycott_company(CompanyName, Justification)
+    )
+    ;
+    (
+      item(_, ItemOrCompanyName,_)
+    ,
+      boycott_company(ItemOrCompanyName, Justification)
+    ).
 
 %8
 %this function takes the customerName and OrderId and return a list contains the non boycotted items.
