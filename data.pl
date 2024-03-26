@@ -162,16 +162,22 @@ boycott_company('Mars', 'Mars will support israeli start-ups and the formation o
 
 %1.List all orders of a specific customer(as a list).
 list_orders(CustomerName,Orders):-
-    customer(CustomerID,CustomerName),
+    customer(CustomerID,CustomerName)
+    ,
     getAllOrders(CustomerID,1,Orders).
 
 getAllOrders(CustomerID, CurrentOrderID, Orders):-
-    \+ order(CustomerID, CurrentOrderID, _), Orders = [].
+    \+ order(CustomerID, CurrentOrderID, _)
+    , 
+    Orders = [].
 
 getAllOrders(CustomerID, CurrentOrderID, Orders):-
-    order(CustomerID, CurrentOrderID, ITems),
-    NextOrderID is CurrentOrderID + 1,
-    getAllOrders(CustomerID, NextOrderID, Temp),
+    order(CustomerID, CurrentOrderID, ITems)
+    ,
+    NextOrderID is CurrentOrderID + 1
+    ,
+    getAllOrders(CustomerID, NextOrderID, Temp)
+    ,
     Orders = [order(CustomerID,CurrentOrderID, ITems) | Temp].
 
 
@@ -180,7 +186,10 @@ getAllOrders(CustomerID, CurrentOrderID, Orders):-
 
 
 %2.Get the number of orders of a specific customer given customer id.
-countOrdersOfCustomer(CustomerName, Count) :-list_orders(CustomerName,Orders), size(Orders, Count).
+countOrdersOfCustomer(CustomerName, Count) :-
+list_orders(CustomerName,Orders)
+, 
+size(Orders, Count).
 
 
 
@@ -189,7 +198,10 @@ countOrdersOfCustomer(CustomerName, Count) :-list_orders(CustomerName,Orders), s
 
 % 3.List all items in a specific customer order given customer id and
 % order id
-getItemsInOrderById(CustomerName, OrderId, Items):- customer(CustomerId, CustomerName), order(CustomerId, OrderId, Items).
+getItemsInOrderById(CustomerName, OrderId, Items):- 
+customer(CustomerId, CustomerName)
+, 
+order(CustomerId, OrderId, Items).
 
 
 
@@ -199,10 +211,14 @@ getItemsInOrderById(CustomerName, OrderId, Items):- customer(CustomerId, Custome
 % 4.Get the num of items in a specific customer order given customer.
 % Name and order id.
 size([],0).
-size([_|T],N):-size(T,N1),N is N1+1.
+size([_|T],N):-
+size(T,N1),N is N1+1.
 getNumOfItems(CustomerName, OrderId, Count) :-
- customer(CustomerId, CustomerName), order(CustomerId, OrderId, Items),
-  size(Items, Count).
+ customer(CustomerId, CustomerName)
+ , 
+ order(CustomerId, OrderId, Items)
+ ,
+ size(Items, Count).
 
 
 
@@ -210,23 +226,27 @@ getNumOfItems(CustomerName, OrderId, Count) :-
 
 
 %5
-calcPriceOfOrder(CustomerName, OrderID, TotalPrice) :-
-    %gives me the custome according to the name of the customer.
-    customer(CustomerID, CustomerName),
-    %gives me the list of items according to the customer id and order id.
-    order(CustomerID, OrderID, Items),
-    %to calculate the total price of the items in the order and put the the whole price to TotalPrice.
+    calcPriceOfOrder(CustomerName, OrderID, TotalPrice) :-
+%gives me the custome according to the name of the customer.
+    customer(CustomerID, CustomerName)
+    ,
+%gives me the list of items according to the customer id and order id.
+    order(CustomerID, OrderID, Items)
+    ,
+%to calculate the total price of the items in the order and put the the whole price to TotalPrice.
     calcPriceOfItems(Items, TotalPrice).
 %this is the base case when the list of the items that we return it from the step above  is empty the TotalPrice will be equal 0.
-calcPriceOfItems([], 0).
+    calcPriceOfItems([], 0).
 %iteration on the list of the items.
 calcPriceOfItems([Item|RemainingItems], TotalPrice) :-
-    %to get the price of the item by the name of this item.
-    % item(ItemName, companyName, Price).
-    item(Item,_, Price),
-    %calc the the Totalprice of the remaining items recursively.
-    calcPriceOfItems(RemainingItems, RemainingPrice),
-    %to put the price of each item to the remaining price and put them in TotalPrice.
+%to get the price of the item by the name of this item.
+% item(ItemName, companyName, Price).
+    item(Item,_, Price)
+    ,
+ %calc the the Totalprice of the remaining items recursively.
+    calcPriceOfItems(RemainingItems, RemainingPrice)
+    ,
+%to put the price of each item to the remaining price and put them in TotalPrice.
     TotalPrice is Price + RemainingPrice.
 
 
@@ -261,25 +281,27 @@ whyToBoycott(ItemOrCompanyName, Justification) :-
 
 %8
 %this function takes the customerName and OrderId and return a list contains the non boycotted items.
-removeBoycottItemsFromAnOrder(CustomerName, OrderId, NewList):-
-    % it gives me a list of items for a specific customer with a specific order id.
+    removeBoycottItemsFromAnOrder(CustomerName, OrderId, NewList):-
+% it gives me a list of items for a specific customer with a specific order id.
     getItemsInOrderById(CustomerName, OrderId, Items),
-    % Remove boycott items
+% Remove boycott items
     removeBoycottItems(Items, NewList).
 %this is the Base case if the list is empty, this means that there is no more items in the list.
-removeBoycottItems([], []).
+    removeBoycottItems([], []).
 %this function it takes the above list and return a list "NewRest" that contains only the non boycotted items.
-removeBoycottItems([BoycottItem|Rest], NewRest):-
-    % to Check if the item is boycotted
-    %if the condition succeeds this item is skipped.
-    isBoycott(BoycottItem),
-    % Continue removing the boycotted items.
+    removeBoycottItems([BoycottItem|Rest], NewRest):-
+% to Check if the item is boycotted
+%if the condition succeeds this item is skipped.
+    isBoycott(BoycottItem)
+    ,
+% Continue removing the boycotted items.
     removeBoycottItems(Rest, NewRest).
 % If the item is not boycotted, keep it and continue removing other items
-removeBoycottItems([Item|Rest], [Item|NewRest]):-
-    %to check if the item isnot boycotted.
-    \+ isBoycott(Item),
-    % Continue removing other items
+    removeBoycottItems([Item|Rest], [Item|NewRest]):-
+%to check if the item isnot boycotted.
+    \+ isBoycott(Item)
+    ,
+% Continue removing other items
     removeBoycottItems(Rest, NewRest).
 
 
@@ -287,60 +309,71 @@ removeBoycottItems([Item|Rest], [Item|NewRest]):-
 
 %9 Given an username and order ID, update the order such that all
 %boycott items are replaced by an alternative (if exists).
-replaceBoycottItemsFromAnOrder(CustomerName, OrderId, NewList):-
-    getItemsInOrderById(CustomerName, OrderId, Items),
+    replaceBoycottItemsFromAnOrder(CustomerName, OrderId, NewList):-
+    getItemsInOrderById(CustomerName, OrderId, Items)
+    ,
     replaceBoycottItem(Items, NewList).
 
-replaceBoycottItem([], []).
-replaceBoycottItem([Item|Remaining], [NewItem|NewRemaining]):-
-    alternative(Item, NewItem),
-    !,
+   replaceBoycottItem([], []).
+   replaceBoycottItem([Item|Remaining]
+   , 
+   [NewItem|NewRemaining]):-
+    alternative(Item, NewItem)
+    ,
+    !
+    ,
     replaceBoycottItem(Remaining, NewRemaining).
-replaceBoycottItem([Item|Remaining], [Item|NewRemaining]):-
-    %if there's no alternative for item -> is not boycott item
-                   replaceBoycottItem(Remaining, NewRemaining).
+    replaceBoycottItem([Item|Remaining], [Item|NewRemaining]):-
+%if there's no alternative for item -> is not boycott item
+    replaceBoycottItem(Remaining, NewRemaining).
 
 
 % 10 Given an username and order ID, calculate the price of the order
 % after
 %replacing all boycott items by its alternative (if it exists).
-calcPriceAfterReplacingBoycottItemsFromAnOrder(CustomerName, OrderId, NewList, TotalPrice):-
-    replaceBoycottItemsFromAnOrder(CustomerName, OrderId, NewList),
+    calcPriceAfterReplacingBoycottItemsFromAnOrder(CustomerName, OrderId, NewList, TotalPrice):-
+    replaceBoycottItemsFromAnOrder(CustomerName, OrderId, NewList)
+    ,
     calcTotalPrice(NewList, TotalPrice).
 
-calcTotalPrice([], 0).
-calcTotalPrice([H|T], Price):-
-    item(H, _, X),
-    calcTotalPrice(T, Y),
+    calcTotalPrice([], 0).
+    calcTotalPrice([H|T], Price):-
+    item(H, _, X)
+    ,
+    calcTotalPrice(T, Y)
+    ,
     Price is X + Y.
 
 
 % 11 calculate the difference in price between the boycott item and its
 % alternative.
-getTheDifferenceInPriceBetweenItemAndAlternative(ItemName, A, DiffPrice):-
-    item(ItemName, _, X),
-    alternative(ItemName, A),
-    item(A, _, Y),
+    getTheDifferenceInPriceBetweenItemAndAlternative(ItemName, A, DiffPrice):-
+    item(ItemName, _, X)
+    ,
+    alternative(ItemName, A)
+    ,
+    item(A, _, Y)
+    ,
     DiffPrice is X - Y.
 
 
 %12 BONUS: Insert/Remove (1)item, (2)alternative and
 % (3)new boycott company to/from the knowledge base. Hint: use assert to
 % insert new fact and retract to remove a fact
-:- dynamic item/3.
-add_item(ItemName, CompanyName, Price):-
-    assert(item(ItemName, CompanyName, Price)).
-remove_item(ItemName, CompanyName, Price):-
-    retract(item(ItemName, CompanyName, Price)).
+     :- dynamic item/3.
+     add_item(ItemName, CompanyName, Price):-
+     assert(item(ItemName, CompanyName, Price)).
+     remove_item(ItemName, CompanyName, Price):-
+     retract(item(ItemName, CompanyName, Price)).
 
-:- dynamic alternative/2.
-add_alternative(ItemName, AlternativeItem):-
+    :- dynamic alternative/2.
+    add_alternative(ItemName, AlternativeItem):-
     assert(alternative(ItemName, AlternativeItem)).
-remove_alternative(ItemName, AlternativeItem):-
+    remove_alternative(ItemName, AlternativeItem):-
     retract(alternative(ItemName, AlternativeItem)).
 
-:- dynamic boycott_company/2.
-add_boycott(CompanyName, Justification):-
+    :- dynamic boycott_company/2.
+    add_boycott(CompanyName, Justification):-
     assert(boycott_company(CompanyName, Justification)).
-remove_boycott(CompanyName, Justification):-
+    remove_boycott(CompanyName, Justification):-
     retract(boycott_company(CompanyName, Justification)).
